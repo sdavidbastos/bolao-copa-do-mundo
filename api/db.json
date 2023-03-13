@@ -1,0 +1,45 @@
+{
+  "users": [
+    {
+      "id": "05d9a1e7-2371-48d8-817b-02a6f5bb5040",
+      "name": "Admin admin",
+      "email": "admin@admin.com",
+      "password": "admin123",
+      "isAdmin": true,
+      "score": 0
+    },
+    {
+      "id": "f4272ae7-faa6-4b5e-ba5e-6079417a16fe",
+      "name": "david",
+      "email": "david@david.com",
+      "password": "david123",
+      "isAdmin": false,
+      "score": 0
+    }
+  ],
+  "matches": [
+    {
+      "id": "35b858a8-0047-40b6-ba6e-8f21771b753a",
+      "date": "2022-12-20",
+      "team1": "Catar",
+      "team2": "Equador",
+      "isOpen": true,
+      "score": [
+        2,
+        0
+      ]
+    }
+  ],
+  "bets": [
+    {
+      "id": "0a8dc99e-5a3c-47e9-ac15-7e5858c1c1b6",
+      "matchId": "35b858a8-0047-40b6-ba6e-8f21771b753a",
+      "userId": "05d9a1e7-2371-48d8-817b-02a6f5bb5040",
+      "value": 30,
+      "score": [
+        2,
+        0
+      ]
+    }
+  ]
+}
