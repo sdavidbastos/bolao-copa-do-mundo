@@ -1,33 +1,29 @@
+import { IGenerateId, IMatch } from "../../types";
 import { Match } from "../entities/Match";
-import { InMemoryRepository } from "../repositories/InMemoryRepository";
+import { IRepository } from "../interfaces/IRepository";
 
-type GenerateId = () => string
 export class MatchService {
-    constructor(private readonly repository: InMemoryRepository<Match>, private generateId: GenerateId) { }
-    save(match: Match) {
-        const {id} = match
-        if(!!id){
-            this.findMatchById(id)
-            this.repository.update({...match, id})
-            return
-        }
-        const matchId = this.generateId()
-        this.repository.add({...match, id: matchId})
+    constructor(private readonly repository: IRepository<Match>, private generateId: IGenerateId) { }
+    save(match: IMatch) {
+        if (!match?.id) return this.repository.add(new Match({ ...match, id: this.generateId() }))
+
+        const matchObj = this.findMatchById(match.id)
+        this.repository.update(matchObj)
     }
     findMatchById(id: string) {
         const match = this.repository.getById(id);
-        if(!match) throw new Error("Match not exist")
+        if (!match) throw new Error("Match not exist")
         return match
     }
 
-    findMatchsById(...ids: string[]){
-        if(!ids.length) return this.repository.getAll();
+    findMatchsById(...ids: string[]) {
+        if (!ids.length) return this.repository.getAll();
         return ids.map((id) => this.repository.getById(id));
     }
 
-    deleteMatch(id: string){
+    deleteMatch(id: string) {
         this.findMatchById(id);
         this.repository.delete(id)
-        return 
+        return
     }
 }

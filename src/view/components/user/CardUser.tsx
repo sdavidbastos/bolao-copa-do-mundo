@@ -5,43 +5,41 @@ import {
   Grid,
   CardActions,
   Button,
-  Box,
 } from "@mui/material";
-import { IMatch } from "../../../types";
-import { formattedDate } from "../../utils";
+import { IUser } from "../../../types";
 
-type IProps = { match: IMatch };
-export const CardContentMatch: React.FC<IProps> = ({ match }) => {
+type IProps = { user: IUser };
+export const CardContentUser: React.FC<IProps> = ({ user }) => {
   return (
     <>
       <Grid item>
         <Typography variant="h5" component="h2">
-          {match.teamA} vs {match.teamB}
+          Nome: {user.name}
         </Typography>
         <Typography variant="subtitle1" color="textSecondary">
-          Data do jogo: {formattedDate(match.matchDate)}
+          Email: {user.email}
         </Typography>
       </Grid>
       <Grid item>
         <Typography variant="h4" component="h3">
-          {match.score?.teamA ?? 0} vs {match.score?.teamB ?? 0}
+          Pontuação: {user.score}
         </Typography>
       </Grid>
     </>
   );
 };
-export const CardMatch: React.FC<IProps> = ({ match }) => {
+export const CardUser: React.FC<IProps> = ({ user }) => {
   return (
     <Card>
       <CardContent>
         <Grid
           container
           spacing={2}
-          direction="column"
-          justifyContent="center"
+          direction="row"
+          justifyContent="flex-start"
           alignItems="stretch"
         >
-          <CardContentMatch match={match} />
+          <CardContentUser user={user} />
         </Grid>
       </CardContent>
       <CardActions>
@@ -50,7 +48,7 @@ export const CardMatch: React.FC<IProps> = ({ match }) => {
           variant="contained"
           onClick={() => console.log("Click")}
         >
-          Apostar
+          Adicionar como admin
         </Button>
       </CardActions>
     </Card>

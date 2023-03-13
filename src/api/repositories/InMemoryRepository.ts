@@ -1,7 +1,7 @@
-import { Repository } from "../interfaces/IRepository";
+import { IRepository } from "../interfaces/IRepository";
 
-export class InMemoryRepository<T extends { id: string }> implements Repository<T> {
-    constructor(private data: T[] = []){}
+export class InMemoryRepository<T extends {id: string}> implements IRepository<T> {
+    constructor(protected data: T[] = []){}
   
     getAll(): T[] {
       return this.data;
@@ -9,6 +9,10 @@ export class InMemoryRepository<T extends { id: string }> implements Repository<
   
     getById(id: string): T | undefined {
       return this.data.find(item => item.id === id);
+    }
+
+    getByKeyName(keyName: keyof T, attribute: any){
+      return this.data.find(item => item[keyName] ===  attribute)
     }
   
     add(item: T): void {

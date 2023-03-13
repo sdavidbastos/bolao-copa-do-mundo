@@ -1,23 +1,22 @@
-type IBet = {
-    id: string,
-    matchId: string,
-    bettorsId: string[],
-    amount: number,
-    value: number,
-}
+import { IBet, IBettings } from "../../types"
+import { generateId } from "../utils/generateId"
+import { Match } from "./Match"
+import { User } from "./User"
 export class Bet {
     id: string
-    matchId: string
-    bettorsId: string[]
+    match: Match
+    bettings: IBettings
     amount: number
     value: number
+    open: boolean
     constructor(
-        { id, matchId, bettorsId, amount, value }: IBet
+        bet: IBet
     ) {
-        this.id=id
-        this.matchId=matchId
-        this.bettorsId=bettorsId
-        this.amount=amount
-        this.value=value
+        this.id = bet.id || generateId()
+        this.match = bet.match
+        this.bettings = bet.bettings || {}
+        this.amount = bet.amount || 0
+        this.value = bet.value || 0
+        this.open = bet.open || true
     }
 }
