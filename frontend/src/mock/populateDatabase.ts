@@ -42,10 +42,8 @@ const seedBet = (betService: BetService, users: User[], matches: Match[]) => {
 
 const users = mockUsers()
 const matches = mockMatches()
-const populateDatabase = () => {
+export const populateDatabase = () => {
     seedUsers(userService, users)
     seedMatches(matchService, matches)
     seedBet(betService, users, matches)
 }
-
-populateDatabase()
