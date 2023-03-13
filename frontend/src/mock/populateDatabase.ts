@@ -19,31 +19,29 @@ const mockUsers = () => {
     return Array(16).fill(0).map(() => (new UserBuilder().build()))
 }
 const mockMatches = () => {
-    const result: Match[] = []
-    for (let i = 0; i < country.length; i = i + 2) {
-        result.push(new MatchBuilder()
-            .setTeam(country[i], country[i + 1])
-            .build())
-    }
-    return result
+    return country.reduce((previous:Match[], current, currentIndex, array): Match[] => {
+        if (!!(currentIndex % 2)) return previous
+        previous.push(new MatchBuilder().setTeam(current, array[currentIndex+1]).build())
+        return previous
+    }, [])
 }
 const seedMatches = (matchService: MatchService, matches: Match[]) => {
-    matches.forEach(match => matchService.save(match))
+    return Promise.all(matches.map(match => matchService.save(match)))
 }
-const seedUsers = (userService: UserService, users: User[]) => {
-    users.forEach((user) => userService.save(user))
+const seedUsers = async (userService: UserService, users: User[]) => {
+    return Promise.all(users.map((user) => userService.save(user)))
 }
 const seedBet = (betService: BetService, users: User[], matches: Match[]) => {
-    users.forEach((user, index) => {
+    return Promise.all(users.map((user, index) => {
         const bet = new BetBuilder().setUserId(user.id).setMatchId(matches[index].id).build()
-        betService.save(bet)
-    })
+        return betService.save(bet)
+    }))
 }
 
 const users = mockUsers()
 const matches = mockMatches()
-export const populateDatabase = () => {
-    seedUsers(userService, users)
-    seedMatches(matchService, matches)
-    seedBet(betService, users, matches)
+export const populateDatabase = async () => {
+    await seedUsers(userService, users)
+    await seedMatches(matchService, matches)
+    await seedBet(betService, users, matches)
 }

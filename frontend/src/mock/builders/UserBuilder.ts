@@ -1,7 +1,7 @@
 import { User } from "../../core/entities/User";
 import { faker } from '@faker-js/faker';
 export class UserBuilder {
-    id: string = faker.name.fullName();
+    id: string = faker.datatype.uuid();
     name: string = faker.name.fullName();
     email: string = faker.helpers.unique(faker.internet.email, [
         this.name,

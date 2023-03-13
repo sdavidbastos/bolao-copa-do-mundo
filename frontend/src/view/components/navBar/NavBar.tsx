@@ -24,7 +24,7 @@ export const NavBar: React.FC = () => {
   const logOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
-    navigate("/login");
+    navigate("/signIn");
   };
   return (
     <AppBar position="sticky">
