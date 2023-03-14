@@ -18,7 +18,7 @@ export const CardContentMatch: React.FC<IProps> = ({ match }) => {
           {match?.score[0] ?? 0} vs {match?.score[1] ?? 0}
         </Typography>
         <Typography variant="subtitle1">
-          Data do jogo: {formattedDate(match.matchDate)}
+          Data do jogo: {match.matchDate}
         </Typography>
       </Grid>
       <Grid item>

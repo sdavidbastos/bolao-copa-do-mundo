@@ -29,11 +29,19 @@ export const handleRequestSignUp = async ({ name, email, password }: ISignUp) =>
     }
 }
 
-export const handleRequestSaveMatch = async (match: Match) => {
+export const handleRequestSaveMatch = async (match: IMatch) => {
     try{
-        const objMatch = new Match(match)
-        await matchService.save(objMatch)
+        await matchService.create(match)
         toast.success("Adicionado com sucesso!")
+    }catch(error){
+        toast.error("Ops!!!, Algo deu errado")
+    }
+}
+
+export const handleRequestListMatch = async () => {
+    try{
+        const list = await matchService.list()
+        return list
     }catch(error){
         toast.error("Ops!!!, Algo deu errado")
     }

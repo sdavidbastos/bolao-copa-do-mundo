@@ -10,31 +10,30 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  FormHelperText,
 } from "@mui/material/";
-import { formattedDate } from "../../utils";
+
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateField } from "@mui/x-date-pickers/DateField";
+
 import { handleRequestSaveMatch } from "../../handleRequest";
+import { IMatch } from "../../types";
+import { countries } from "../../../constants/country";
 
 type FormErrors = Partial<MatchFormProps>;
-interface MatchFormProps {
-  teamA: string;
-  teamB: string;
-  matchDate: Date;
-  score?: [number, number];
-  value?: number;
-  isOpen?: boolean;
-}
+type MatchFormProps = Omit<IMatch, "id">;
 
-export function MatchForm() {
+export const FormMatch = () => {
   const [errors, setFormErrors] = useState<FormErrors>({} as FormErrors);
   const [formFields, setFormFields] = useState<MatchFormProps>({
     teamA: "",
     teamB: "",
-    matchDate: new Date(),
+    matchDate: null,
     score: [0, 0],
-    value: 0,
+    value: 30,
     isOpen: true,
   });
-
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -43,17 +42,16 @@ export function MatchForm() {
       formErrors.teamA = "Campo Obrigatório";
     }
     if (!formFields.teamB) {
-      formFields.teamB = "Campo Obrigatório";
+      formErrors.teamB = "Campo Obrigatório";
     }
     if (formFields.teamA === formFields.teamB) {
-      formFields.teamB = "Seleção B deve ser diferente da seleção A";
+      formErrors.teamB = "Seleção B deve ser diferente da seleção A";
     }
 
     setFormErrors(formErrors);
     if (Object.keys(formErrors).length === 0) {
       (async () => {
-        const {id, ...match} = formFields
-        await handleRequestSaveMatch(match)
+        await handleRequestSaveMatch(formFields);
       })();
     }
   };
@@ -66,9 +64,19 @@ export function MatchForm() {
     }));
   };
 
-  const handleInputSelectChange = (
-    event: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>
+  const handleInputChangeScore = (
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    const { name, value } = event.target;
+    const [a, b] = formFields.score;
+
+    if (name === "scoreA")
+      setFormFields({ ...formFields, score: [parseInt(value), b] });
+    if (name === "scoreB")
+      setFormFields({ ...formFields, score: [a, parseInt(value)] });
+  };
+
+  const handleInputSelectChange = (event: SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setFormFields((prevState) => ({
       ...prevState,
@@ -88,11 +96,15 @@ export function MatchForm() {
               onChange={handleInputSelectChange}
               value={formFields.teamA}
               fullWidth
+              error={Boolean(errors.teamA)}
             >
-              <MenuItem value="Team A">Team A</MenuItem>
-              <MenuItem value="Team B">Team B</MenuItem>
-              <MenuItem value="Team C">Team C</MenuItem>
+              {countries.map((country) => (
+                <MenuItem key={country} value={country}>
+                  {country}
+                </MenuItem>
+              ))}
             </Select>
+            {errors.teamA && <FormHelperText>{errors.teamA}</FormHelperText>}
           </FormControl>
         </Grid>
         <Grid item xs={6} sm={6}>
@@ -104,52 +116,28 @@ export function MatchForm() {
               onChange={handleInputSelectChange}
               value={formFields.teamB}
               fullWidth
+              error={Boolean(errors.teamB)}
             >
-              <MenuItem value="Team A">Team A</MenuItem>
-              <MenuItem value="Team B">Team B</MenuItem>
-              <MenuItem value="Team C">Team C</MenuItem>
+              {countries.map((country) => (
+                <MenuItem key={country} value={country}>
+                  {country}
+                </MenuItem>
+              ))}
             </Select>
+            {errors.teamB && <FormHelperText>{errors.teamB}</FormHelperText>}
           </FormControl>
         </Grid>
         <Grid item xs={6} sm={6}>
-          <TextField
-            label="Match Date"
-            variant="filled"
-            fullWidth
-            margin="normal"
-            type="date"
-            name="matchDate"
-            value={formFields.matchDate}
-            onChange={handleInputChange}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateField
+              label="Data da partida"
+              value={formFields.matchDate}
+              onChange={handleInputChange}
+              format="DD-MM-YYYY"
+            />
+          </LocalizationProvider>
         </Grid>
-        <Grid item xs={4} sm={4}>
-          <TextField
-            label="Score"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="score"
-            type="number"
-            InputProps={{ inputProps: { min: 0 } }}
-            value={formFields.score?.[0]}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={4} sm={4}>
-          <TextField
-            label=" "
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="score"
-            type="number"
-            InputProps={{ inputProps: { min: 0 } }}
-            value={formFields.score?.[1]}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} >
+        <Grid item xs={12} sm={6}>
           <TextField
             label="Value"
             variant="outlined"
@@ -160,6 +148,32 @@ export function MatchForm() {
             inputProps={{ step: 0.01, min: 0 }}
             value={formFields.value}
             onChange={handleInputChange}
+          />
+        </Grid>
+        <Grid item xs={4} sm={4}>
+          <TextField
+            label="Placar 1"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="scoreA"
+            type="number"
+            InputProps={{ inputProps: { min: 0 } }}
+            value={formFields.score?.[0]}
+            onChange={handleInputChangeScore}
+          />
+        </Grid>
+        <Grid item xs={4} sm={4}>
+          <TextField
+            label="Placar 2"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="scoreB"
+            type="number"
+            InputProps={{ inputProps: { min: 0 } }}
+            value={formFields.score?.[1]}
+            onChange={handleInputChangeScore}
           />
         </Grid>
         <Grid item xs={12}>
@@ -183,4 +197,4 @@ export function MatchForm() {
       </Grid>
     </form>
   );
-}
+};

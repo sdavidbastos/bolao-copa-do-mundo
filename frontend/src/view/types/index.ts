@@ -4,9 +4,9 @@ export type IMatch = {
     teamA: string,
     teamB: string,
     matchDate: Date,
-    score?: [number, number]
-    value?: number
-    isOpen?: boolean
+    score: [number, number]
+    value: number
+    isOpen: boolean
 }
 export type IUser = {
     id?: string;

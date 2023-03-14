@@ -3,9 +3,9 @@ import { IMatch } from "../../types";
 import { CardMatch } from "./CardMatch";
 
 type IProps = {
-  matches: Required<IMatch>[];
+  matches?: Required<IMatch>[];
 };
-export const ListMatch: React.FC<IProps> = ({ matches }) => {
+export const ListMatch: React.FC<IProps> = ({ matches=[] }) => {
   return (
     <Grid container spacing={2}>
       {matches.map((match) => (

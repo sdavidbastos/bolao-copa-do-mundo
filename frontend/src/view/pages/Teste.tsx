@@ -1,5 +1,5 @@
-import { MatchForm } from "../components/match/FormMatch";
+import { FormMatch } from "../components/match/FormMatch";
 
 export const Teste = () => {
-  return <MatchForm />;
+  return <FormMatch />;
 };

@@ -29,7 +29,7 @@ const AdminRoutes: React.FC = () => {
   const { user } = useContext(AppContext);
 
   if (!id) return <Navigate replace to="/signIn" />;
-  if (user?.isAdmin) return <Unauthorized />;
+  if (!user?.isAdmin) return <Unauthorized />;
 
   return <Outlet />;
 };

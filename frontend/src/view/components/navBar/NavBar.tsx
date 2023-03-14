@@ -3,24 +3,34 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context";
 
-const routes: { path: string; name: string }[] = [
+const adminRoutes: { path: string; name: string }[] = [
   {
     path: "/matches",
-    name: "Matches",
+    name: "matches",
   },
   {
     path: "/bets",
-    name: "Bets",
+    name: "bets",
   },
   {
     path: "/users",
-    name: "Users",
+    name: "users",
+  },
+];
+const userRoutes: { path: string; name: string }[] = [
+  {
+    path: "/matches",
+    name: "matches",
+  },
+  {
+    path: "/bets",
+    name: "bets",
   },
 ];
 export const NavBar: React.FC = () => {
   let navigate = useNavigate();
   let { user } = useContext(AppContext);
-  if(user?.isAdmin) routes.pop()
+  const routes = user?.isAdmin ? adminRoutes : userRoutes
   const logOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("id");

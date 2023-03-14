@@ -10,7 +10,7 @@ export class UserService {
     }
     async findById(id: string) {
         const user = await this.client.get<User>(id)
-        if (!user) throw new Error("User not found")
+        if (!user) throw new Error("Usario não é válido")
         const { password: pswd, ...userWithoutPassword } = user
         return userWithoutPassword
     }
@@ -21,16 +21,16 @@ export class UserService {
 
     async signIn({ email, password }: ISignIn) {
         const user = await this.findByEmail(email)
-        if (!user || user.password !== password) throw new Error("Invalid user or password")
+        if (!user || user.password !== password) throw new Error("Usuario ou senha inválidos")
         const {password: passwd, ...currentUser} = user
         return currentUser
     }
 
 
     async signUp({ name, email, password }: ISignUp) {
-        if (!email) throw new Error("Email not informed")
-        if (!password) throw new Error("Password not informed")
-        if (!!(await this.findByEmail(email))) throw new Error("User already registered")
+        if (!email) throw new Error("Email não informado")
+        if (!password) throw new Error("Password não informado")
+        if (!!(await this.findByEmail(email))) throw new Error("Email já registrado")
 
         const { password: passwd, ...user } = await this.client.post<User>(`${baseUrl}/${this.routeName}`, new User({ email, name, password }));
         return user

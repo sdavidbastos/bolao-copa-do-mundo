@@ -9,18 +9,13 @@ import { MatchBuilder } from "./builders/MatchBuilder"
 import { UserBuilder } from "./builders/UserBuilder"
 import fs from "fs";
 import { promisify } from "util";
-
-const country = ['Alemanha', 'Argentina', 'Arábia Saudita', 'Austrália',
-    'Brasil', 'Bélgica', 'Camarões', 'Canadá', 'Catar', 'Coreia do Sul', 'Costa Rica'
-    , 'Croácia', 'Dinamarca', 'Equador', 'Espanha', 'Estados Unidos', 'França', 'Gana'
-    , 'Holanda', 'Inglaterra', 'Irã', 'Japão', 'Marrocos', 'México', 'País de Gales',
-    'Polônia', 'Portugal', 'Senegal', 'Suíça', 'Sérvia', 'Tunísia', 'Uruguai']
+import { countries } from "../constants/country"
 
 const mockUsers = () => {
     return Array(16).fill(0).map(() => (new UserBuilder().build()))
 }
 const mockMatches = () => {
-    return country.reduce((previous: Match[], current, currentIndex, array): Match[] => {
+    return countries.reduce((previous: Match[], current, currentIndex, array): Match[] => {
         if (!!(currentIndex % 2)) return previous
         previous.push(new MatchBuilder().setTeam(current, array[currentIndex + 1]).build())
         return previous
@@ -41,7 +36,7 @@ const obj = {
     users,
     matches,
     bets,
-    country
+    countries
 }
 
 
