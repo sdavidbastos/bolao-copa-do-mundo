@@ -1,14 +1,16 @@
 import { toast } from "react-toastify";
-import { userFactory } from "../core/factories";
-import { populateDatabase } from "../mock/populateDatabase";
+import { Match } from "../core/entities/Match";
+import { userFactory,matchFactory, servicesFactory } from "../core/factories";
+import { IMatch } from "./types";
 import { ISignIn, ISignUp } from "./types/requests";
 
 const userService = userFactory()
+const matchService = matchFactory()
+
 export const handleRequestSignIn = async ({ email, password }: ISignIn) => {
     try {
         const user = await userService.signIn({ email, password })
         localStorage.setItem("id", user.id);
-        if (user.isAdmin) populateDatabase()
         toast.success("Usuario logado com sucesso!")
         return user
     } catch (error) {
@@ -24,5 +26,15 @@ export const handleRequestSignUp = async ({ name, email, password }: ISignUp) =>
         return handleRequestSignIn({ email, password })
     } catch (error: any) {
         toast.error(error?.message)
+    }
+}
+
+export const handleRequestSaveMatch = async (match: Match) => {
+    try{
+        const objMatch = new Match(match)
+        await matchService.save(objMatch)
+        toast.success("Adicionado com sucesso!")
+    }catch(error){
+        toast.error("Ops!!!, Algo deu errado")
     }
 }

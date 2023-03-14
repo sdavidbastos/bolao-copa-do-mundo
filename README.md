@@ -2,7 +2,7 @@
 
 ## Primeiro passo: rodar o backend
 
-- Instalar o json-server: 
+- Instalar o json-server utilizando o comado abaixo: 
   ```
   npm install -g json-server
   ```
@@ -11,7 +11,7 @@
   json-server --watch db.json
   ```
 ## Segundo passo: rodar o frontend
-- Instale as dependências
+- Acesse a pasta frontend través do terminal e instale as dependências
   ```
   npm install
   ```

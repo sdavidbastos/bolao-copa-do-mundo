@@ -13,6 +13,7 @@ import { Matches } from "./pages/Matches";
 import { NotFound } from "./pages/NotFound";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
+import { Teste } from "./pages/Teste";
 import { Unauthorized } from "./pages/Unauthorized";
 import { Users } from "./pages/Users";
 
@@ -35,6 +36,7 @@ const AdminRoutes: React.FC = () => {
 export const AppRoutes: React.FC = () => (
   <BrowserRouter>
     <Routes>
+      <Route path="/teste" element={<Teste />} />
       <Route path="/signIn" element={<SignIn />} />
       <Route path="/signUp" element={<SignUp />} />
 
